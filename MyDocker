@@ -1,0 +1,22 @@
+# To Start with a Rust base image
+FROM rust:1.62 as builder
+
+# To Create a new binary installation
+RUN USER=root cargo new --bin myapp
+WORKDIR /myapp
+
+# To Copy my source code
+COPY ./Cargo.toml ./Cargo.toml
+COPY ./src ./src
+
+# To Build the application
+RUN cargo build --release
+
+# To Use a smaller base image for the final stage
+FROM debian:buster-slim
+
+# To Copy the build artifact from the builder stage
+COPY --from=builder /myapp/target/release/myapp /usr/local/bin/myapp
+
+# To Run the binary
+CMD ["myapp"]
