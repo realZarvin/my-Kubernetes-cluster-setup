@@ -1,0 +1,28 @@
+replicaCount: 2
+
+
+image:
+  repository: your-dockerhub-username/user-service
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+
+service:
+  type: ClusterIP
+  port: 80
+
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: example.com
+      paths:
+        - path: /user
+          pathType: Prefix
+
+
+config:
+  APP_ENV: "production"
+  APP_SECRET: "supersecretkey"
+  
