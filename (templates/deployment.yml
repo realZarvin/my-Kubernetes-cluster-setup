@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-user-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-user-service
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-user-service
+    spec:
+      containers:
+      - name: user-service
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APP_ENV
+          value: {{ .Values.config.APP_ENV }}
+        - name: APP_SECRET
+          value: {{ .Values.config.APP_SECRET }}
+          
